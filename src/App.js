@@ -12,7 +12,7 @@ class App extends Component{
     this.state={
       
       board:Array(9).fill(null),
-      player : "X",
+      player : null,
       winner : null
     }
   }
@@ -59,9 +59,14 @@ class App extends Component{
   handleClick(index)
   {
 
+    if(this.state.player && !this.state.winner)
+    {
+
+    
+
    let newBoard=this.state.board
 
-   if(this.state.board[index]==null && !this.state.winner){
+   if(this.state.board[index]==null ){
     newBoard[index]=this.state.player
        
    this.setState({
@@ -73,15 +78,19 @@ class App extends Component{
 
    }
  
-    
+  }
   }
 
   setPlayer(player)
-  console.console.log(player);
-  
   {
-
+    this.setState({
+      player
+    })
   }
+
+  
+
+  
  render(){
 
   const Box=this.state.board.map(
