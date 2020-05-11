@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-
+import Status from  './Component/choosingPlayers';
 import  './App.css';
 
-import Player from  './Component/choosingPlayer';
+
+
+import Status from './Component/Status';
 
 class App extends Component{
 
@@ -40,10 +42,16 @@ class App extends Component{
 
      ]
 
-     for(let index =0;index<winLines.length;index++)
+     this.checkMatch(winLines)
+
+  }
+
+  checkMatch(winLines){
+    for(let index =0;index<winLines.length;index++)
      {
        const [a,b,c]=winLines[index];
-       if(this.state.board[a] && this.state.board[a]==this.state.board[b] && this.state.board[a]==this.state.board[c])
+       let board=this.state.board
+       if(board[a] && board[a]===board[b] && board[a]===board[c])
        {
          alert('You won')
 
@@ -53,7 +61,6 @@ class App extends Component{
          })
        }
      }
-
   }
 
   handleClick(index)
@@ -61,25 +68,21 @@ class App extends Component{
 
     if(this.state.player && !this.state.winner)
     {
+        let newBoard=this.state.board
 
-    
-
-   let newBoard=this.state.board
-
-   if(this.state.board[index]==null ){
-    newBoard[index]=this.state.player
+          if(this.state.board[index]==null ){
+            newBoard[index]=this.state.player
        
-   this.setState({
-    board:newBoard,
-    player:this.state.player=="X"?"O":"X"
-   })
+            this.setState({
+              board:newBoard,
+              player:this.state.player=="X"?"O":"X"
+             })
 
-   this.checkWinner()
-
+            this.checkWinner()
    }
  
-  }
-  }
+   }
+ }
 
   setPlayer(player)
   {
@@ -90,10 +93,9 @@ class App extends Component{
 
   
 
-  
- render(){
+  renderBoxes(){
 
-  const Box=this.state.board.map(
+    return this.state.board.map(
       (box,index)=>
       <div className="box"
            key={index} 
@@ -102,17 +104,34 @@ class App extends Component{
        </div>
   
   )
+
+  }
+
+  reset()
+  {
+      this.setState({player:null,
+      winner:null,board: Array(9).fill(null)})
+      
+  }
+ render(){
+
   
   return (
     <div className="container">
 
      < h1>Tic Tac Toe</h1>
-    <Player player={()=>this.setPlayer()}/>
+     
+     <Status player={this.state.player} 
+     setPlayer={(e)=>{this.setPlayer(e)}}
+     winner={this.state.winner}
+     />
 
          <div className="board">
-          {Box}
+          {this.renderBoxes()}
            
           </div>
+
+          <button disabled = {!this.state.winner}onClick={()=>this.reset()}Reset></button>
          
     </div>
 
